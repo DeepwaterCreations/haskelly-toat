@@ -5,3 +5,8 @@ getRandomLetter isVowel gen  = (letterSet !! idx, newGen)
     where vowels = ['a', 'e', 'i', 'o', 'u'] 
           letterSet = if isVowel then vowels else [c | c <- ['a'..'z'], not $ c `elem` vowels]
           (idx, newGen) = randomR (0, (length letterSet)-1) gen
+
+getRandomWord :: RandomGen g => [Bool] -> g -> String
+getRandomWord (v:[]) gen = [fst $ getRandomLetter v gen]
+getRandomWord (v:vs) gen = randomLetter:(getRandomWord vs newGen)
+    where (randomLetter, newGen) = getRandomLetter v gen
